@@ -1,3 +1,3 @@
-cd ./my-app
+cd ./src/frontend
 npm start
 pause
