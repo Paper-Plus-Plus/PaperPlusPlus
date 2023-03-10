@@ -40,9 +40,10 @@ public class CompileCode {
             for (int i = 0; i < contents.length; i++) {
                 if (contents[i].contains(".java") && !contents[i].contains("CompileCode")) {
                     compiler.run(null, null, null, "src/user/" + contents[i]);
-                    // System.out.println("Compiling "+ contents[i]);
+                    System.out.println("Compiling "+ balls);
                 }
             }
+            
 
             URLClassLoader cs = new URLClassLoader(new URL[] { dirFile.toURI().toURL() });
             Class<?> c = cs.loadClass(name);
@@ -52,7 +53,7 @@ public class CompileCode {
 
         } catch (Exception e) {
             System.out.println("false\n");
-            System.out.println(formatErrorString(e));
+            System.err.println(formatErrorString(e));
             // e.printStackTrace();
         }
     }
@@ -88,14 +89,14 @@ public class CompileCode {
         CompileCode c = new CompileCode("src.user." + mainMethod);
         c.copyFiles();
         c.start();
-        File dirFile = new File("src/user/");
-
-        String contents[] = dirFile.list();
-        for (int i = 0; i < contents.length; i++) {
-            File f1 = new File("src/user/" + contents[i]);
-            // f1.delete();
-            // System.out.println("Deleting from user" + contents[i]);
-        }
+        //File dirFile = new File("src/user/");
+        //
+        //String contents[] = dirFile.list();
+        //for (int i = 0; i < contents.length; i++) {
+        //    File f1 = new File("src/user/" + contents[i]);
+        //    // f1.delete();
+        //    // System.out.println("Deleting from user" + contents[i]);
+        //}
 
     }
 

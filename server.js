@@ -1,21 +1,28 @@
 /**
  * @fileoverview This file is the entry point for the backend of the application.
- * It contains the express server and the routes.
+ * It contains the express server, image parsing and file creation.
+ * Calls the loader.js file to load the language specific compilers.
  * 
  */
 
 // General Imports
 const fs = require('fs');
-const path = require('path');
-const { exec } = require('child_process');
 const process = require("process");
 const prettier = require("prettier");
-const { langRunner, cleanUp } = require('./loader');
+const { langRunner, cleanUp } = require('./src/backend/loader');
+
+/**
+ * Sleep function
+ * @param {*} ms 
+ * @returns 
+ */
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // Vision API
 const vision = require('@google-cloud/vision');
 const client = new vision.ImageAnnotatorClient();
-const DIR = `${process.cwd()}/data/scanned/`;
 
 // Webserver Imports
 const express = require("express");
@@ -27,24 +34,13 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors());
 const PORT = 8080;
 
-let data;
-
-/**
- * Sleep function
- * @param {*} ms 
- * 
- */
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 /**
  * Parse the text from the image to file
  * @param {*} path
  * @param {*} fileName 
  * @param {*} lang
  */
-async function parseFile(lang, path, filename) {
+async function parseFile(lang, filename, path) {
   let [result] = await client.documentTextDetection(path);
   let fullTextAnnotation = result.fullTextAnnotation;
 
@@ -56,7 +52,7 @@ async function parseFile(lang, path, filename) {
   }
 
   // parse text to proper format
-  const parsedText = prettier.format(fullTextAnnotation.text, { parser: parser, tabWidth: 2 });
+  const parsedText = prettier.format(fullTextAnnotation.text, { parser: "java", tabWidth: 2 });
 
   // fs write parsedText to java file
   fs.writeFile(`${process.cwd()}/data/exported/${filename}.${lang}`, parsedText, (err) => {
@@ -71,9 +67,10 @@ app.get("/", cors(), async (req, res) => {
 app.post("/", (req, res) => {
   console.log("collected data from frontend");
   const { documents } = req.body;
-  let ready = false;
-  let lang = documents[0].language;
-  documents.forEach((document) => {
+  let data;
+  //let lang = documents[0].language;
+  let lang = "java";
+  documents.forEach(async (document) => {
     let className = document.className;
     let buffer = Buffer.from(document.base64.split(",").pop(), "base64");
     // write image to file
@@ -81,9 +78,10 @@ app.post("/", (req, res) => {
     // read file and parse them to text
     let path = `${process.cwd()}/data/scanned/${className}.jpg`;
     try {
-      parseFile(document.language, className, path);
+      await parseFile(lang, className, path); // change this to document.language later
     } catch (err) {
-      return res.send({result: false, output: "error processing files"});
+      res.send({result: false, output: "error processing files"});
+      return console.log("sent data to frontend");
     }
     // write file to task.txt
     if (document.mainMethod) {
@@ -92,11 +90,15 @@ app.post("/", (req, res) => {
       fs.writeFile(`${process.cwd()}/data/exported/task.txt`, `${className}.java\n`, (err) => { if (err) { console.log(err) } });
     }
   });
+  setTimeout(async () => {
     console.log("sending data to frontend");
     data = langRunner(lang);
+    await sleep(3000)
+    console.log(data);
     res.send(data);
     console.log("sent data to frontend");
     cleanUp();
+  }, 1000);
 });
 
   

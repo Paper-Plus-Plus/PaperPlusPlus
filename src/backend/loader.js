@@ -1,3 +1,40 @@
+const fs = require('fs');
+const path = require('path');
+const { exec } = require('child_process');
+const process = require("process");
+
+/**
+ *  Compile the java file and run it
+ * 
+ * @returns {Object} data
+ */
+function JavaCompiler() {
+  let data = {
+    result: false,
+    output: ""
+  }
+  exec(`javac "${process.cwd()}/src/backend/Java/CompileCode.java" && java -cp ./ src.backend.Java.CompileCode`, (err, stdout, stderr) => {
+    if (err) throw err;
+
+    // the *entire* stdout and stderr (buffered)
+    if (stderr) {
+      data.result = false;
+      data.output = stderr;
+    } else {
+      let result = stdout.split('\n');
+      if (result[0] != "false") {
+        data.result = true;
+        data.output = stdout;
+      } else {
+        result.shift();
+        data.result = false;
+        data.output = result.join('\n').trim();
+      }
+    }
+  });
+  return data;
+}
+
 /**
  * Calling respective compilers based on the language
  * 
@@ -5,12 +42,10 @@
 function langRunner(lang) {
   switch (lang) {
     case "java": {
-      let javaCompiler = require(".Java/compiler");
-      return javaCompiler.compile();
+      return JavaCompiler();
     } 
     //case "js": {
-    //  let jsCompiler = require(".JavaScript/compiler");
-    //  return jsCompiler.compile();
+    //  return JSCompiler();
     //}
   }
 }
@@ -36,11 +71,11 @@ function cleanUp() {
   fs.readdir(`${process.cwd()}/data/exported/`, (err, files) => {
     if (err) throw err;
     for (const file of files) {
-      if (file.includes('.java')) {
-        fs.unlink(path.join(`${process.cwd()}/data/exported/`, file), err => {
-          if (err) throw err;
-        });
-      }
+      //if (file.includes('.java')) {
+      //  fs.unlink(path.join(`${process.cwd()}/data/exported/`, file), err => {
+      //    if (err) throw err;
+      //  });
+      //}
       if (file.includes('.txt')) {
         fs.writeFile(`${process.cwd()}/data/exported/task.txt`, "", (err) => {
           if (err) throw err;
@@ -50,11 +85,11 @@ function cleanUp() {
   });
 
   // delete all class files in Backend directory
-  fs.readdir(`${process.cwd()}/src/Backend/`, (err, files) => {
+  fs.readdir(`${process.cwd()}/src/backend/Java`, (err, files) => {
     if (err) throw err;
     for (const file of files) {
       if (file.includes('.class')) {
-        fs.unlink(path.join(`${process.cwd()}/src/Backend/`, file), err => {
+        fs.unlink(path.join(`${process.cwd()}/src/backend/Java`, file), err => {
           if (err) throw err;
         });
       }
@@ -76,4 +111,4 @@ function cleanUp() {
   console.log("Janitor is done cleaning up!");
 }
 
-modules.exports = {langRunner, cleanUp};
+module.exports = {langRunner, cleanUp};
