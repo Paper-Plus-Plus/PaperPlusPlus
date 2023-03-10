@@ -1,4 +1,4 @@
-package src.Backend;
+package src.backend.Java;
 class Test {
 
     public static void main(String[] args) {

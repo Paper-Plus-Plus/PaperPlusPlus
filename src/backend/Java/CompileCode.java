@@ -1,4 +1,4 @@
-package src.Backend;
+package src.backend.Java;
 
 import java.io.File;
 import java.io.FileInputStream;
