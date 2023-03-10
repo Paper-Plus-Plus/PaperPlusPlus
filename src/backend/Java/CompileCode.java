@@ -40,7 +40,7 @@ public class CompileCode {
             for (int i = 0; i < contents.length; i++) {
                 if (contents[i].contains(".java") && !contents[i].contains("CompileCode")) {
                     compiler.run(null, null, null, "src/user/" + contents[i]);
-                    System.out.println("Compiling "+ balls);
+                    //System.out.println("Compiling "+ balls);
                 }
             }
             
