@@ -6,5 +6,5 @@ package-lock.json
 /data/scanned/*.jpg
 /data/scanned/*.png
 /src/backend/Java/*.class
-/src/backend/Java/user/*
-!/src/backend/Java/user/placeholder.txt
+/src/user/*
+!/src/user/placeholder.txt

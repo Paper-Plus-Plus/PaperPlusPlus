@@ -159,6 +159,7 @@ public class CompileCode {
             in = new FileInputStream(a); // input stream
             out = new FileOutputStream(b); // output stream
             int n; // number of bytes read
+
             out.write("package src.user;\n".getBytes()); // write package name
 
             // read() function to read the byte of data
