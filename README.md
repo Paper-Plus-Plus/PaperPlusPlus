@@ -23,9 +23,9 @@ Disclaimers & limitations in current version:
 </ul>
 Authors:
 <ul>
-    <li><a href="https://github.com/HarutoHiroki">HarutoHiroki</a></li>
+    <li><a href="https://github.com/HarutoHiroki">Haruto</a></li>
     <li><a href="https://github.com/nico-himself">Nico</a></li>
-    <li><a href="https://github.com/wenjielee11">wenjielee11</a></li>
+    <li><a href="https://github.com/wenjielee11">Lee</a></li>
     <li><a href="https://github.com/sarah-i-rubenstein2">Sarah</a></li>
 </ul>
 
