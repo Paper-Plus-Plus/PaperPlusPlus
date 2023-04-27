@@ -7,7 +7,7 @@ We created this submission for
 <a href="https://www.madhacks.io/"><b>MadHacks 2023</b></a>. We hope you like it!
 <br>View the <a href="https://docs.google.com/presentation/d/1FKOwhARHGi6wQ65SD_Ygseh8P6zCMjH5ALz70doeUMg/edit?usp=sharing" target="_blank" rel="noopener noreferrer">related slide deck</a>.</p>
 
-<a href="Designed Paper++ during MadHacks 2023 to parse handwritten user-provided .png images (utilizing Google OCR API), execute the handwritten code, and provide output through a beautiful frontend built with React, Bootstrap and Axios. Engineered support for compilation of several images (several classes, working together), allowing realization of complex programs.">DEMO HERE.</a>
+<a href="https://www.youtube.com/watch?v=l95d6R7MwiM">DEMO HERE.</a>
 
 # Paper++
 <p>Have you ever felt the desire to code on paper?
